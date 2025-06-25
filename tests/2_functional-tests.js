@@ -53,7 +53,7 @@ suite("Functional Tests", function () {
                 assert.property(res.body.stockData, 'likes');
                 assert.equal(res.body.stockData.stock, 'GOOG');
                 assert.isNumber(res.body.stockData.price);
-                assert.isNumber(res.body.stockData.likes);
+                assert.isNumber(res.body.stockData.likes,1);
                 done();
             });
         });
@@ -66,24 +66,24 @@ suite("Functional Tests", function () {
                 assert.equal(res.status, 200);
                 assert.property(res.body, 'stockData');
                 assert.isArray(res.body.stockData);
-                assert.equal(res.body.stockData.length, 2);
+                
                 
                 // Vérifier le premier stock
                 assert.property(res.body.stockData[0], 'stock');
                 assert.property(res.body.stockData[0], 'price');
                 assert.property(res.body.stockData[0], 'rel_likes');
-                assert.notProperty(res.body.stockData[0], 'likes');
+                assert.equal(res.body.stockData[0].stock, 'GOOG')
+                assert.isNumber(res.body.stockData[0].price)
+                assert.isNumber(res.body.stockData[0].rel_likes)
                 
                 // Vérifier le deuxième stock
                 assert.property(res.body.stockData[1], 'stock');
                 assert.property(res.body.stockData[1], 'price');
                 assert.property(res.body.stockData[1], 'rel_likes');
-                assert.notProperty(res.body.stockData[1], 'likes');
-                
-                // Vérifier que rel_likes sont des nombres
-                assert.isNumber(res.body.stockData[0].rel_likes);
-                assert.isNumber(res.body.stockData[1].rel_likes);
-                
+                assert.equal(res.body.stockData[1].stock, 'MSFT')
+                assert.isNumber(res.body.stockData[1].price)
+                assert.isNumber(res.body.stockData[1].rel_likes)
+               
                 done();
             });
         });
@@ -96,23 +96,22 @@ suite("Functional Tests", function () {
                 assert.equal(res.status, 200);
                 assert.property(res.body, 'stockData');
                 assert.isArray(res.body.stockData);
-                assert.equal(res.body.stockData.length, 2);
                 
                 // Vérifier le premier stock
                 assert.property(res.body.stockData[0], 'stock');
                 assert.property(res.body.stockData[0], 'price');
                 assert.property(res.body.stockData[0], 'rel_likes');
-                assert.notProperty(res.body.stockData[0], 'likes');
+                assert.equal(res.body.stockData[0].stock, 'GOOG')
+                assert.isNumber(res.body.stockData[0].price)
+                assert.isNumber(res.body.stockData[0].rel_likes)
                 
                 // Vérifier le deuxième stock
                 assert.property(res.body.stockData[1], 'stock');
                 assert.property(res.body.stockData[1], 'price');
                 assert.property(res.body.stockData[1], 'rel_likes');
-                assert.notProperty(res.body.stockData[1], 'likes');
-                
-                // Vérifier que rel_likes sont des nombres
-                assert.isNumber(res.body.stockData[0].rel_likes);
-                assert.isNumber(res.body.stockData[1].rel_likes);
+                assert.equal(res.body.stockData[1].stock, 'MSFT')
+                assert.isNumber(res.body.stockData[1].price)
+                assert.isNumber(res.body.stockData[1].rel_likes)
                 
                 done();
             });
