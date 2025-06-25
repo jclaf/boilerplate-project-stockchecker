@@ -80,6 +80,10 @@ module.exports = function (app) {
             price: stock2.price,
             rel_likes: stock2.likes - stock1.likes
           };
+
+          // Remove likes property for two-stock response
+          delete stock1.likes;
+          delete stock2.likes;
           
           return res.json({ stockData: [noStock1, nStock2] });
         }
