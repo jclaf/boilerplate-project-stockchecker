@@ -10,7 +10,6 @@ suite("Functional Tests", function () {
         test('Viewing one stock: GET request to /api/stock-prices/', function(done) {
             chai.request(server)
             .get('/api/stock-prices')
-            .set("content-type", "application/json")
             .query({ stock: 'GOOG' })
             .end(function(err, res) {
                 assert.equal(res.status, 200);
@@ -28,7 +27,6 @@ suite("Functional Tests", function () {
         test('Viewing one stock and liking it: GET request to /api/stock-prices/', function(done) {
             chai.request(server)
             .get('/api/stock-prices')
-            .set("content-type", "application/json")
             .query({ stock: 'GOOG', like: 'true' })
             .end(function(err, res) {
                 assert.equal(res.status, 200);
@@ -46,7 +44,6 @@ suite("Functional Tests", function () {
         test('Viewing the same stock and liking it again: GET request to /api/stock-prices/', function(done) {
             chai.request(server)
             .get('/api/stock-prices')
-            .set("content-type", "application/json")
             .query({ stock: 'GOOG', like: 'true' })
             .end(function(err, res) {
                 assert.equal(res.status, 200);
@@ -64,7 +61,6 @@ suite("Functional Tests", function () {
         test('Viewing two stocks: GET request to /api/stock-prices/', function(done) {
             chai.request(server)
             .get('/api/stock-prices')
-            .set("content-type", "application/json")
             .query({ stock: ['GOOG', 'MSFT'] })
             .end(function(err, res) {
                 assert.equal(res.status, 200);
@@ -95,7 +91,6 @@ suite("Functional Tests", function () {
         test('Viewing two stocks and liking them: GET request to /api/stock-prices/', function(done) {
             chai.request(server)
             .get('/api/stock-prices')
-            .set("content-type", "application/json")
             .query({ stock: ['GOOG', 'MSFT'], like: 'true' })
             .end(function(err, res) {
                 assert.equal(res.status, 200);
