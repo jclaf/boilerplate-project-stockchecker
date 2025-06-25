@@ -45,7 +45,7 @@ module.exports = function (app) {
         let like = req.query.like;
         
         console.log('Stock:', stock);
-        console.log('Like:', like, typeof like);
+        console.log('Like:', like);
         const clientIP = req.ip || req.connection.remoteAddress;
         const anonymizedIP = anonymizeIP(clientIP);
         if (!stock) {
