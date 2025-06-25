@@ -30,6 +30,12 @@ module.exports = function (app) {
       throw new Error('Unable to fetch stock price');
     }
   }
+  // Route temporaire pour nettoyer la base
+  app.get('/api/reset', async (req, res) => {
+    await Stock.deleteMany({});
+    res.json({ message: 'Database cleared' });
+  });
+
 
   app.route('/api/stock-prices')
     .get(async function (req, res){
@@ -54,7 +60,7 @@ module.exports = function (app) {
               //const price = await getStockPrice(stock);
               stockDoc = new Stock({ stock: s.toUpperCase(), likes: 0, ips: [] });
             } 
-            if((like === 'true'|| like===true ) && !stockDoc.ips.includes(anonymizedIP)) {
+            if(like === 'true' && !stockDoc.ips.includes(anonymizedIP)) {
               stockDoc.likes++;
               stockDoc.ips.push(anonymizedIP);
               //await stockDoc.save();
