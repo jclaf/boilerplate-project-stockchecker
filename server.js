@@ -5,7 +5,6 @@ const bodyParser  = require('body-parser');
 const cors        = require('cors');
 const helmet = require('helmet');
 const mongoose = require('mongoose');
-require('dotenv').config();
 
 
 const apiRoutes         = require('./routes/api.js');
