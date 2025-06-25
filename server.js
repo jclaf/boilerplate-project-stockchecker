@@ -1,5 +1,5 @@
 'use strict';
-require('dotenv').config();
+require('dotenv').config({ path: './sample.env' });
 const express     = require('express');
 const bodyParser  = require('body-parser');
 const cors        = require('cors');
@@ -13,7 +13,7 @@ const runner            = require('./test-runner');
 
 const app = express();
 
-
+console.log('DB URI:', process.env.DB); 
 // Connexion MongoDB avec Mongoose
 mongoose.connect(process.env.DB, {
   useNewUrlParser: true,
