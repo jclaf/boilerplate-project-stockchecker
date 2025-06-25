@@ -34,7 +34,9 @@ module.exports = function (app) {
   app.route('/api/stock-prices')
     .get(async function (req, res){
       try {
+        console.log('All query params:', req.query);
         let { stock, like } = req.query;
+        console.log('Like parameter:', like, typeof like);
         const clientIP = req.ip || req.connection.remoteAddress;
         const anonymizedIP = anonymizeIP(clientIP);
         if (!stock) {
