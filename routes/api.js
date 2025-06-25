@@ -51,17 +51,17 @@ module.exports = function (app) {
               //const price = await getStockPrice(stock);
               stockDoc = new Stock({ stock: s.toUpperCase(), likes: 0, ips: [] });
             } 
-            if((like === 'true'|| like===true )&& !stockDoc.ips.includes(anonymizedIP)) {
-              stockDoc.likes += 1;
+            if((like === 'true'|| like===true ) && !stockDoc.ips.includes(anonymizedIP)) {
+              stockDoc.likes++;
               stockDoc.ips.push(anonymizedIP);
               //await stockDoc.save();
             }
             await stockDoc.save();
             const price = await getStockPrice(s);
             
-            console.log('Like parameter:', like, typeof like);
-            console.log('Stock found:', stockDoc ? 'yes' : 'no');
-            console.log('IP already liked:', stockDoc ? stockDoc.ips.includes(anonymizedIP) : 'N/A');
+            // console.log('Like parameter:', like, typeof like);
+            // console.log('Stock found:', stockDoc ? 'yes' : 'no');
+            // console.log('IP already liked:', stockDoc ? stockDoc.ips.includes(anonymizedIP) : 'N/A');
             
             results.push({
               stock: s.toUpperCase(),
