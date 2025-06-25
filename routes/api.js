@@ -52,7 +52,7 @@ module.exports = function (app) {
               stockDoc = new Stock({ stock: s.toUpperCase(), likes: 0, ips: [] });
             } 
             if((like === 'true'|| like===true )&& !stockDoc.ips.includes(anonymizedIP)) {
-              stockDoc.likes++;
+              stockDoc.likes += 1;
               stockDoc.ips.push(anonymizedIP);
               //await stockDoc.save();
             }
