@@ -3,12 +3,35 @@ require('dotenv').config();
 const express     = require('express');
 const bodyParser  = require('body-parser');
 const cors        = require('cors');
+const helmet = require('helmet');
+const mongoose = require('mongoose');
+require('dotenv').config();
+
 
 const apiRoutes         = require('./routes/api.js');
 const fccTestingRoutes  = require('./routes/fcctesting.js');
 const runner            = require('./test-runner');
 
 const app = express();
+
+// Sécurité avec Helmet
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'"],
+      styleSrc: ["'self'"]
+    }
+  }
+}));
+
+
+// Connexion MongoDB
+mongoose.connect(process.env.DB, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+
 
 app.use('/public', express.static(process.cwd() + '/public'));
 
