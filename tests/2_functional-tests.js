@@ -35,7 +35,9 @@ suite("Functional Tests", function () {
 
         test('Viewing one stock and liking it: GET request to /api/stock-prices/', function(done) {
             chai.request(server)
-            .get('/api/stock-prices?stock=goog&like=true')
+            .get('/api/stock-prices')
+            .query({ stock: 'GOOG', like: 'true' })
+            
             .end(function(err, res) {
                 assert.equal(res.status, 200);
                 assert.property(res.body, 'stockData');
@@ -69,7 +71,7 @@ suite("Functional Tests", function () {
         test('Viewing two stocks: GET request to /api/stock-prices/', function(done) {
             chai.request(server)
             .get('/api/stock-prices')
-            .query({ stock: ['GOOG', 'TEST'] })
+            .query({ stock: ['GOOG', 'MSFT'] })
             .end(function(err, res) {
                 assert.equal(res.status, 200);
                 assert.property(res.body, 'stockData');

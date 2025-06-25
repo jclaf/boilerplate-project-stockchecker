@@ -15,14 +15,7 @@ const app = express();
 
 // console.log('DB URI:', process.env.DB); 
 // Connexion MongoDB avec Mongoose
-mongoose.connect(process.env.DB, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-}).then(() => {
-  console.log('Connected to MongoDB');
-}).catch(err => {
-  console.error('MongoDB connection error:', err);
-});
+mongoose.connect(process.env.DB);
 
 // Sécurité avec Helmet
 app.use(helmet({
@@ -74,17 +67,17 @@ app.use(function(req, res, next) {
 //Start our server and tests!
 const listener = app.listen(process.env.PORT || 3000, function () {
   console.log('Your app is listening on port ' + listener.address().port);
-  // if(process.env.NODE_ENV==='test') {
-  //   console.log('Running Tests...');
-  //   setTimeout(function () {
-  //     try {
-  //       runner.run();
-  //     } catch(e) {
-  //       console.log('Tests are not valid:');
-  //       console.error(e);
-  //     }
-  //   }, 3500);
-  // }
+  if(process.env.NODE_ENV==='test') {
+    console.log('Running Tests...');
+    setTimeout(function () {
+      try {
+        runner.run();
+      } catch(e) {
+        console.log('Tests are not valid:');
+        console.error(e);
+      }
+    }, 3500);
+  }
 });
 
 module.exports = app; //for testing
