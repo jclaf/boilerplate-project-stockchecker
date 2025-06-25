@@ -35,8 +35,11 @@ module.exports = function (app) {
     .get(async function (req, res){
       try {
         console.log('All query params:', req.query);
-        let { stock, like } = req.query;
-        console.log('Like parameter:', like, typeof like);
+        let stock = req.query.stock;
+        let like = req.query.like;
+        
+        console.log('Stock:', stock);
+        console.log('Like:', like, typeof like);
         const clientIP = req.ip || req.connection.remoteAddress;
         const anonymizedIP = anonymizeIP(clientIP);
         if (!stock) {
