@@ -69,23 +69,13 @@ module.exports = function (app) {
         } else{
           // Two stocks: calculate relative likes and return array
           const [stock1, stock2] = results;
-          const nStock1 = {
-            stock: stock1.stock,
-            price: stock1.price,
-            rel_likes: stock1.likes - stock2.likes
-          };
+          stock1.rel_likes = stock1.likes - stock2.likes;
+          stock2.rel_likes = stock2.likes - stock1.likes;
           
-          const nStock2 = {
-            stock: stock2.stock,
-            price: stock2.price,
-            rel_likes: stock2.likes - stock1.likes
-          };
-
           // Remove likes property for two-stock response
           delete stock1.likes;
           delete stock2.likes;
-          
-          return res.json({ stockData: [noStock1, nStock2] });
+          return res.json({ stockData: [stock1, stock2] });
         }
       } catch (error) {
         return res.json({ error: error.message });
