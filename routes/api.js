@@ -33,51 +33,51 @@ module.exports = function (app) {
 
   app.route('/api/stock-prices')
     .get(async function (req, res){
-      let { stock, like } = req.query;
-      const clientIP = req.ip || req.connection.remoteAddress;
-      const anonymizedIP = anonymizeIP(clientIP);
-      if (!stock) {
-        return res.json({ error: 'Stock parameter required' });
-      }
-
-      const stocks = Array.isArray(stock) ? stock : [stock];
-      const results = [];
-      for (const s of stocks) {
-        try {
-          let stockDoc = await Stock.findOne({ stock: s.toUpperCase() });
-          if (!stockDoc) {
-            const price = await getStockPrice(stock);
-            stockDoc = new Stock({ stock, likes: 0, ips: [anonymizedIP] });
-          } 
-          if(like === 'true' && !stockDoc.ips.includes(anonymizedIP)) {
-            stockDoc.likes++;
-            stockDoc.ips.push(anonymizedIP);
-            await stockDoc.save();
-          }
-          const price = await getStockPrice(s);
-          
-          results.push({
-            stock: s,
-            price: price,
-            likes: stockDoc.likes
-          });
-        } catch (error) {
-          return res.json({ error: error.message });
+      try {
+        let { stock, like } = req.query;
+        const clientIP = req.ip || req.connection.remoteAddress;
+        const anonymizedIP = anonymizeIP(clientIP);
+        if (!stock) {
+          return res.json({ error: 'Stock parameter required' });
         }
-      }
 
-      if (results.length === 1) {
-        return res.json({ stockData: results[0]});
-      } else{
-        // Two stocks: calculate relative likes and return array
-        const [stock1, stock2] = results;
-        stock1.rel_likes = stock1.likes - stock2.likes;
-        stock2.rel_likes = stock2.likes - stock1.likes;
-        
-        // Remove likes property for two-stock response
-        delete stock1.likes;
-        delete stock2.likes;
-        return res.json({ stockData: [stock1, stock2] });
+        const stocks = Array.isArray(stock) ? stock : [stock];
+        const results = [];
+        for (const s of stocks) {
+            let stockDoc = await Stock.findOne({ stock: s.toUpperCase() });
+            if (!stockDoc) {
+              const price = await getStockPrice(stock);
+              stockDoc = new Stock({ stock, likes: 0, ips: [anonymizedIP] });
+            } 
+            if(like === 'true' && !stockDoc.ips.includes(anonymizedIP)) {
+              stockDoc.likes++;
+              stockDoc.ips.push(anonymizedIP);
+              await stockDoc.save();
+            }
+            const price = await getStockPrice(s);
+            
+            results.push({
+              stock: s,
+              price: price,
+              likes: stockDoc.likes
+            });
+        }
+
+        if (results.length === 1) {
+          return res.json({ stockData: results[0]});
+        } else{
+          // Two stocks: calculate relative likes and return array
+          const [stock1, stock2] = results;
+          stock1.rel_likes = stock1.likes - stock2.likes;
+          stock2.rel_likes = stock2.likes - stock1.likes;
+          
+          // Remove likes property for two-stock response
+          delete stock1.likes;
+          delete stock2.likes;
+          return res.json({ stockData: [stock1, stock2] });
+        }
+      } catch (error) {
+        return res.json({ error: error.message });
       }
   });
     
