@@ -69,7 +69,7 @@ suite("Functional Tests", function () {
         test('Viewing two stocks: GET request to /api/stock-prices/', function(done) {
             chai.request(server)
             .get('/api/stock-prices')
-            .query({ stock: ['GOOG', 'MSFT'] })
+            .query({ stock: ['GOOG', 'TEST'] })
             .end(function(err, res) {
                 assert.equal(res.status, 200);
                 assert.property(res.body, 'stockData');
