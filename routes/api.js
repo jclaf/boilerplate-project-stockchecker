@@ -46,7 +46,7 @@ module.exports = function (app) {
         for (const s of stocks) {
             let stockDoc = await Stock.findOne({ stock: s.toUpperCase() });
             if (!stockDoc) {
-              const price = await getStockPrice(stock);
+              //const price = await getStockPrice(stock);
               stockDoc = new Stock({ stock: s.toUpperCase(), likes: 0, ips: [] });
             } 
             if(like === 'true' && !stockDoc.ips.includes(anonymizedIP)) {
