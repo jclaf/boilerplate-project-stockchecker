@@ -49,7 +49,7 @@ module.exports = function (app) {
               //const price = await getStockPrice(stock);
               stockDoc = new Stock({ stock: s.toUpperCase(), likes: 0, ips: [] });
             } 
-            if(like === 'true' && !stockDoc.ips.includes(anonymizedIP)) {
+            if((like === 'true'|| like===true )&& !stockDoc.ips.includes(anonymizedIP)) {
               stockDoc.likes++;
               stockDoc.ips.push(anonymizedIP);
               //await stockDoc.save();
@@ -57,11 +57,16 @@ module.exports = function (app) {
             await stockDoc.save();
             const price = await getStockPrice(s);
             
+            console.log('Like parameter:', like, typeof like);
+            console.log('Stock found:', stockDoc ? 'yes' : 'no');
+            console.log('IP already liked:', stockDoc ? stockDoc.ips.includes(anonymizedIP) : 'N/A');
+            
             results.push({
               stock: s.toUpperCase(),
               price: price,
               likes: stockDoc.likes
             });
+            
         }
 
         if (results.length === 1) {
@@ -77,6 +82,7 @@ module.exports = function (app) {
           delete stock2.likes;
           return res.json({ stockData: [stock1, stock2] });
         }
+
       } catch (error) {
         return res.json({ error: error.message });
       }
