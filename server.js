@@ -13,7 +13,7 @@ const runner            = require('./test-runner');
 
 const app = express();
 
-console.log('DB URI:', process.env.DB); 
+// console.log('DB URI:', process.env.DB); 
 // Connexion MongoDB avec Mongoose
 mongoose.connect(process.env.DB, {
   useNewUrlParser: true,

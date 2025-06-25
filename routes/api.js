@@ -77,7 +77,7 @@ module.exports = function (app) {
         // Remove likes property for two-stock response
         delete stock1.likes;
         delete stock2.likes;
-        return res.json({ stockData: results });
+        return res.json({ stockData: [stock1, stock2] });
       }
   });
     
