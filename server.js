@@ -13,23 +13,31 @@ const runner            = require('./test-runner');
 
 const app = express();
 
+
+// Connexion MongoDB avec Mongoose
+mongoose.connect(process.env.DB, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).then(() => {
+  console.log('Connected to MongoDB');
+}).catch(err => {
+  console.error('MongoDB connection error:', err);
+});
+
 // Sécurité avec Helmet
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
       scriptSrc: ["'self'"],
-      styleSrc: ["'self'"]
-    }
-  }
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      fontSrc: ["'self'"],
+      imgSrc: ["'self'", "data:", "https:"],
+    },
+  },
+  noSniff: true,
+  xssFilter: true
 }));
-
-
-// Connexion MongoDB
-mongoose.connect(process.env.DB, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
 
 
 app.use('/public', express.static(process.cwd() + '/public'));
