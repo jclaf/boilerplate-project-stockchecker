@@ -47,17 +47,18 @@ module.exports = function (app) {
             let stockDoc = await Stock.findOne({ stock: s.toUpperCase() });
             if (!stockDoc) {
               const price = await getStockPrice(stock);
-              stockDoc = new Stock({ stock, likes: 0, ips: [anonymizedIP] });
+              stockDoc = new Stock({ stock: s.toUpperCase(), likes: 0, ips: [] });
             } 
             if(like === 'true' && !stockDoc.ips.includes(anonymizedIP)) {
               stockDoc.likes++;
               stockDoc.ips.push(anonymizedIP);
-              await stockDoc.save();
+              //await stockDoc.save();
             }
+            await stockDoc.save();
             const price = await getStockPrice(s);
             
             results.push({
-              stock: s,
+              stock: s.toUpperCase(),
               price: price,
               likes: stockDoc.likes
             });
@@ -68,13 +69,19 @@ module.exports = function (app) {
         } else{
           // Two stocks: calculate relative likes and return array
           const [stock1, stock2] = results;
-          stock1.rel_likes = stock1.likes - stock2.likes;
-          stock2.rel_likes = stock2.likes - stock1.likes;
+          const nStock1 = {
+            stock: stock1.stock,
+            price: stock1.price,
+            rel_likes: stock1.likes - stock2.likes
+          };
           
-          // Remove likes property for two-stock response
-          delete stock1.likes;
-          delete stock2.likes;
-          return res.json({ stockData: [stock1, stock2] });
+          const nStock2 = {
+            stock: stock2.stock,
+            price: stock2.price,
+            rel_likes: stock2.likes - stock1.likes
+          };
+          
+          return res.json({ stockData: [noStock1, nStock2] });
         }
       } catch (error) {
         return res.json({ error: error.message });
