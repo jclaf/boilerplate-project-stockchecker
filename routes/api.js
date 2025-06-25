@@ -68,7 +68,15 @@ module.exports = function (app) {
 
       if (results.length === 1) {
         return res.json({ stockData: results[0]});
-      } else {
+      } else{
+        // Two stocks: calculate relative likes and return array
+        const [stock1, stock2] = results;
+        stock1.rel_likes = stock1.likes - stock2.likes;
+        stock2.rel_likes = stock2.likes - stock1.likes;
+        
+        // Remove likes property for two-stock response
+        delete stock1.likes;
+        delete stock2.likes;
         return res.json({ stockData: results });
       }
   });
