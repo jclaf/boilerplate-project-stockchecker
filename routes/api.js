@@ -39,33 +39,38 @@ module.exports = function (app) {
       if (!stock) {
         return res.json({ error: 'Stock parameter required' });
       }
-      stock = stock.toUpperCase();
-      try {
-        let stockData = await Stock.findOne({ stock });
-        if (!stockData) {
-          const price = await getStockPrice(stock);
-          stockData = new Stock({ stock, likes: 0, ips: [anonymizedIP] });
-          await stockData.save();
-        } else {
-          stockData.ips.push(anonymizedIP);
-          await stockData.save();
+
+      const stocks = Array.isArray(stock) ? stock : [stock];
+      const results = [];
+      for (const s of stocks) {
+        try {
+          let stockDoc = await Stock.findOne({ stock: s.toUpperCase() });
+          if (!stockDoc) {
+            const price = await getStockPrice(stock);
+            stockDoc = new Stock({ stock, likes: 0, ips: [anonymizedIP] });
+          } 
+          if(like === 'true' && !stockDoc.ips.includes(anonymizedIP)) {
+            stockDoc.likes++;
+            stockDoc.ips.push(anonymizedIP);
+            await stockDoc.save();
+          }
+          const price = await getStockPrice(s);
+          
+          results.push({
+            stock: s,
+            price: price,
+            likes: stockDoc.likes
+          });
+        } catch (error) {
+          return res.json({ error: error.message });
         }
-        if (like) {
-          stockData.likes++;
-          await stockData.save();
-        }
-        
-        const price = await getStockPrice(stock);
-        const response = {
-          stock: stockData.stock,
-          price: price,
-          likes: stockData.likes
-        };
-        return res.json(response);
-      } catch (error) {
-        return res.json({ error: error.message });
       }
 
-    });
+      if (results.length === 1) {
+        return res.json({ stockData: results[0]});
+      } else {
+        return res.json({ stockData: results });
+      }
+  });
     
 };
