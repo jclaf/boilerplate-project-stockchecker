@@ -148,11 +148,18 @@ suite('Functional Tests', function() {
     //       done()
     //     })
     //   })
-    
+        test('DEBUG - simple query', function(done) {
+            chai.request(server)
+            .get('/api/stock-prices')
+            .query('stock=DEBUG&like=true') // ✅ String au lieu d'objet
+            .end(function(err, res){
+                console.log('Response:', res.body);
+                done()
+            })
+        })
         test('1 stock with like', function(done) {
             chai.request(server)
-                .get('/api/stock-prices')
-                .query({ stock: 'goog', like: 'true' })
+                .get('/api/stock-prices?stock=goog&like=true')
                 .end(function(err, res){
 
                     assert.equal(res.status, 200)
